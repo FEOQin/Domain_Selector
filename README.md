@@ -7,7 +7,7 @@ This repository contains a simple shell script to test the latency of a predefin
 To run the script directly on your VPS, use the following command:
 
 ```bash
-bash <(curl -sL https://raw.githubusercontent.com/ccxkai233/Domain_Selector/main/reality_check.sh)
+bash <(curl -sL https://raw.githubusercontent.com/ccxkai233/Domain_Selector/main/domain_check.sh)
 ```
 
 The script will:
@@ -17,4 +17,4 @@ The script will:
 
 ## Contributing
 
-Feel free to add more high-quality domains to the list in `reality_check.sh` by submitting a pull request.
+Feel free to add more high-quality domains to the list in `domain_check.sh` by submitting a pull request.
