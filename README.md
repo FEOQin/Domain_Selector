@@ -7,7 +7,7 @@ This repository contains a simple shell script to test the latency of a predefin
 To run the script directly on your VPS, use the following command:
 
 ```bash
-bash <(curl -sL https://raw.githubusercontent.com/ccxkai233/Domain_Selector/main/domain_check.sh)
+bash <(curl -sL https://raw.githubusercontent.com/FEOQin/Domain_Selector/main/domain_check.sh)
 ```
 
 The script will:
