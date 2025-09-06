@@ -2,7 +2,7 @@
 
 # ==============================================================================
 # reality_check.sh - 检测Reality协议伪装域名的延迟并检查TLS 1.3和HTTP/2支持
-# 更新说明: 加入TLS 1.3和HTTP/2支持检查功能
+# 更新说明: 加入TLS 1.3和HTTP/2支持检查功能，并优化结果筛选逻辑
 #
 # 使用方法:
 # 1. 上传到 GitHub。
@@ -134,7 +134,8 @@ echo "==========================================================================
 
 # 创建临时文件存储结果
 RESULTS_FILE=$(mktemp)
-trap 'rm -f "$RESULTS_FILE"' EXIT
+ELIGIBLE_RESULTS_FILE=$(mktemp)
+trap 'rm -f "$RESULTS_FILE" "$ELIGIBLE_RESULTS_FILE"' EXIT
 
 # 计数器
 total_domains=${#DOMAINS[@]}
@@ -158,11 +159,22 @@ for DOMAIN in "${DOMAINS[@]}"; do
             TLS13_SUPPORT=$(check_tls13 "$DOMAIN")
             H2_SUPPORT=$(check_h2 "$DOMAIN")
             
+            # 获取TLS 1.3和HTTP/2的检查结果状态
+            check_tls13 "$DOMAIN" >/dev/null 2>&1
+            TLS13_STATUS=$?
+            check_h2 "$DOMAIN" >/dev/null 2>&1
+            H2_STATUS=$?
+            
             # 格式化输出
             printf "  %-40s -> ${GREEN}%.3f ms${NC} %s %s\n" "$DOMAIN" "$AVG_LATENCY" "$TLS13_SUPPORT" "$H2_SUPPORT"
             
-            # 将结果存入临时文件，格式为 "延迟 域名" 以便排序
-            echo "$AVG_LATENCY $DOMAIN" >> "$RESULTS_FILE"
+            # 将结果存入临时文件，格式为 "延迟 域名 TLS1.3状态 H2状态" 以便排序和筛选
+            echo "$AVG_LATENCY $DOMAIN $TLS13_STATUS $H2_STATUS" >> "$RESULTS_FILE"
+            
+            # 如果同时支持TLS 1.3和HTTP/2，则添加到符合条件的文件
+            if [ $TLS13_STATUS -eq 0 ] && [ $H2_STATUS -eq 0 ]; then
+                echo "$AVG_LATENCY $DOMAIN" >> "$ELIGIBLE_RESULTS_FILE"
+            fi
         else
             printf "  %-40s -> ${RED}无法解析延迟${NC}\n" "$DOMAIN"
         fi
@@ -173,20 +185,24 @@ done
 
 echo
 echo "==================================================================================================="
-echo -e "${YELLOW}测试完成，延迟最低的前 10 个域名：${NC}"
-echo "---------------------------------------------------------------------------------------------------"
 
-# 检查结果文件是否为空
-if [ -s "$RESULTS_FILE" ]; then
-    # 对结果进行数字排序，并显示前10名
-    sort -n -k1 "$RESULTS_FILE" | head -n 10 | while read line; do
-        LATENCY=$(echo $line | awk '{print $1}')
-        DOMAIN=$(echo $line | awk '{print $2}')
-        printf "  ${GREEN}%-10.3f ms${NC}\t%s\n" "$LATENCY" "$DOMAIN"
-    done
-else
-    echo -e "${RED}没有检测到任何可用的域名。${NC}"
+# 检查符合条件的域名数量
+ELIGIBLE_COUNT=$(wc -l < "$ELIGIBLE_RESULTS_FILE")
+if [ $ELIGIBLE_COUNT -eq 0 ]; then
+    echo -e "${RED}没有找到同时支持TLS 1.3和HTTP/2的域名。${NC}"
+    echo "---------------------------------------------------------------------------------------------------"
+    exit 1
 fi
 
+echo -e "${YELLOW}测试完成，从 $ELIGIBLE_COUNT 个同时支持TLS 1.3和HTTP/2的域名中选出延迟最低的前 10 个：${NC}"
 echo "---------------------------------------------------------------------------------------------------"
-echo -e "${BLUE}提示: 绿色表示支持，红色表示不支持。选择域名时优先选择同时支持TLS 1.3和HTTP/2的域名。${NC}"
+
+# 对符合条件的域名进行排序，并显示前10名
+sort -n -k1 "$ELIGIBLE_RESULTS_FILE" | head -n 10 | while read line; do
+    LATENCY=$(echo $line | awk '{print $1}')
+    DOMAIN=$(echo $line | awk '{print $2}')
+    printf "  ${GREEN}%-10.3f ms${NC}\t%s\n" "$LATENCY" "$DOMAIN"
+done
+
+echo "---------------------------------------------------------------------------------------------------"
+echo -e "${BLUE}提示: 已筛选出同时支持TLS 1.3和HTTP/2的域名，这些是最适合用于Reality协议的伪装域名。${NC}"
