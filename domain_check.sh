@@ -2,7 +2,7 @@
 
 # ==============================================================================
 # reality_check.sh - 检测Reality协议伪装域名的延迟并检查TLS 1.3和HTTP/2支持
-# 更新说明: 只显示同时支持TLS 1.3和HTTP/2的域名中延迟最低的前10个
+# 更新说明: 修复颜色显示问题，确保颜色代码正确解析
 #
 # 使用方法:
 # 1. 上传到 GitHub。
@@ -153,27 +153,24 @@ for DOMAIN in "${DOMAINS[@]}"; do
         
         if [[ -n "$AVG_LATENCY" ]]; then
             # 检查TLS 1.3和HTTP/2支持
-            TLS13_SUPPORT=""
-            H2_SUPPORT=""
-            
             if check_tls13 "$DOMAIN"; then
-                TLS13_SUPPORT="${GREEN}支持TLS1.3${NC}"
+                TLS13_STATUS="${GREEN}支持TLS1.3${NC}"
                 tls13_qualified=1
             else
-                TLS13_SUPPORT="${RED}不支持TLS1.3${NC}"
+                TLS13_STATUS="${RED}不支持TLS1.3${NC}"
                 tls13_qualified=0
             fi
             
             if check_h2 "$DOMAIN"; then
-                H2_SUPPORT="${GREEN}支持H2${NC}"
+                H2_STATUS="${GREEN}支持H2${NC}"
                 h2_qualified=1
             else
-                H2_SUPPORT="${RED}不支持H2${NC}"
+                H2_STATUS="${RED}不支持H2${NC}"
                 h2_qualified=0
             fi
             
-            # 格式化输出
-            printf "  %-40s -> ${GREEN}%.3f ms${NC} %s %s\n" "$DOMAIN" "$AVG_LATENCY" "$TLS13_SUPPORT" "$H2_SUPPORT"
+            # 使用echo -e来正确解析颜色代码
+            echo -e "  ${DOMAIN} -> ${GREEN}${AVG_LATENCY} ms${NC} ${TLS13_STATUS} ${H2_STATUS}"
             
             # 将结果存入临时文件，格式为 "延迟 域名" 以便排序
             echo "$AVG_LATENCY $DOMAIN" >> "$RESULTS_FILE"
@@ -184,10 +181,10 @@ for DOMAIN in "${DOMAINS[@]}"; do
                 ((qualified_count++))
             fi
         else
-            printf "  %-40s -> ${RED}无法解析延迟${NC}\n" "$DOMAIN"
+            echo -e "  ${DOMAIN} -> ${RED}无法解析延迟${NC}"
         fi
     else
-        printf "  %-40s -> ${RED}超时或无法访问${NC}\n" "$DOMAIN"
+        echo -e "  ${DOMAIN} -> ${RED}超时或无法访问${NC}"
     fi
 done
 
@@ -206,7 +203,7 @@ if [ -s "$QUALIFIED_RESULTS_FILE" ]; then
     sort -n -k1 "$QUALIFIED_RESULTS_FILE" | head -n 10 | while read line; do
         LATENCY=$(echo $line | awk '{print $1}')
         DOMAIN=$(echo $line | awk '{print $2}')
-        printf "  ${GREEN}%-10.3f ms${NC}\t%s\n" "$LATENCY" "$DOMAIN"
+        echo -e "  ${GREEN}$LATENCY ms${NC}\t$DOMAIN"
     done
 else
     echo -e "${RED}没有检测到任何同时支持TLS 1.3和HTTP/2的域名。${NC}"
@@ -218,7 +215,7 @@ else
         sort -n -k1 "$RESULTS_FILE" | head -n 10 | while read line; do
             LATENCY=$(echo $line | awk '{print $1}')
             DOMAIN=$(echo $line | awk '{print $2}')
-            printf "  ${GREEN}%-10.3f ms${NC}\t%s\n" "$LATENCY" "$DOMAIN"
+            echo -e "  ${GREEN}$LATENCY ms${NC}\t$DOMAIN"
         done
     else
         echo -e "${RED}没有检测到任何可用的域名。${NC}"
