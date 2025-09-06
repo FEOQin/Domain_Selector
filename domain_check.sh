@@ -41,16 +41,19 @@ DOMAINS=(
     "cdn-cgi.trafficmanager.net"
     "cloudflare.com"
     "one.one.one.one" # Cloudflare DNS
+    "www.eu.cloudflare.com"  # Cloudflare欧洲特定域名
 
     # Fastly 相关 (另一家CDN)
     "fastly.net"
     "prod.flatpak-api.fly.dev" # 示例Fastly服务
+    "edge.eu.fastly.net"       # Fastly欧洲边缘节点
 
     # Amazon AWS 相关 (全球CDN)
     "aws.amazon.com"
     "d1.awsstatic.com"
     "s0.awsstatic.com"
     "player.live-video.net"
+    "eu-central-1.console.aws.amazon.com"  # AWS欧洲中部控制台
 
     # Google 相关 (全球网络)
     "google.com"
@@ -58,12 +61,14 @@ DOMAINS=(
     "gstatic.com"
     "fonts.googleapis.com"
     "fonts.gstatic.com"
+    "dns.google"                           # Google DNS
 
     # Microsoft 相关 (Azure/CDN)
     "microsoft.com"
     "www.microsoft.com"
     "azure.com"
     "live.com"
+    "cdn-eu.azureedge.net"                 # Microsoft Azure欧洲CDN
 
     # 其他大型全球服务 (通常在欧州有良好存在)
     "github.com"
@@ -76,19 +81,24 @@ DOMAINS=(
     "whatsapp.com"
     "open.spotify.com"
     "duckduckgo.com"
+    "www.de.wikipedia.org"                 # 维基百科德国站点
+    "de.wikipedia.org"                     # 维基百科德国站点
+    "www.bbc.co.uk"                        # BBC英国站点
 
     # 特定欧洲或德国服务/CDN
-    "hetzner.com"
-    "contabo.com"
-    "ovh.com" # 法国主机商，但在德国也有业务
+    "hetzner.com"                          # 德国知名主机商:cite[1]:cite[6]
+    "contabo.com"                          # 德国主机商:cite[10]
+    "ovh.com"                              # 法国主机商，但在德国也有业务
     "digitalocean.com"
     "stackoverflow.com"
-    "sstatic.net" # Stack Exchange CDN
+    "sstatic.net"                          # Stack Exchange CDN
 
     # 游戏相关 (部分在欧洲有服务器)
     "riotgames.com"
     "auth.riotgames.com"
     "lol.secure.dyn.riotcdn.net"
+    "europe.api.riotgames.com"             # Riot Games欧洲API服务器
+    "prod.eu.lol.riotgames.com"            # 英雄联盟欧洲服务器
 
     # 新增来自搜索推荐的部分域名
     "gateway.icloud.com"
@@ -100,6 +110,27 @@ DOMAINS=(
     "addons.mozilla.org"
     "images-na.ssl-images-amazon.com"
     "m.media-amazon.com"
+
+    # 新增更多欧洲/德国优化域名
+    "www.eu.cloudflare.com"                # Cloudflare欧洲节点
+    "edge.eu.fastly.net"                   # Fastly欧洲边缘节点
+    "europe.cdn.ampproject.org"            # AMP项目欧洲CDN
+    "cdn-eu.azureedge.net"                 # Microsoft Azure欧洲CDN
+    "www.de.wikipedia.org"                 # 维基百科德国站点 (流量大，本地可能有缓存)
+    "www.spotify.com"                      # Spotify全球服务 (在欧洲有大量服务器)
+    "de.wikipedia.org"                     # 维基百科德国站点
+    "www.bbc.co.uk"                        # BBC英国站点 (地理位置相对较近)
+    "europe-west1.cloudfunctions.net"      # Google Cloud欧洲区域
+    "aws-eu-central-1.console.aws.amazon.com" # AWS欧洲（法兰克福）控制台
+    "status.eu-central-1.console.aws.amazon.com" # AWS欧洲（法兰克福）状态页
+    "europe.api.riotgames.com"             # Riot Games欧洲API服务器
+    "prod.eu.lol.riotgames.com"            # 英雄联盟欧洲服务器
+    "level3.ssl.blizzard.com"              # 暴雪游戏欧洲服务器
+    "dns.google"                           # Google DNS (anycast节点，可能会解析到较近的服务器)
+    "dns10.quad9.net"                      # Quad9 DNS欧洲节点
+    "de.ntp.org"                           # NTP欧洲服务器池 (虽然用途不同，但通常是低延迟的关键基础设施)
+    "nl.ntp.org"                           # NTP荷兰服务器
+    "fr.ntp.org"                           # NTP法国服务器
 )
 
 # 检查TLS 1.3支持函数
