@@ -36,101 +36,68 @@ DOMAINS=(
     "polyfill-fastly.io"
     "lpcdn.lpsnmedia.net"
 
-    # 新增推荐域名 (主要针对欧洲/德国优化)
-    # Cloudflare 相关 (大型CDN，欧洲节点多)
-    "cdn-cgi.trafficmanager.net"
-    "cloudflare.com"
-    "one.one.one.one" # Cloudflare DNS
-    "www.eu.cloudflare.com"  # Cloudflare欧洲特定域名
-
-    # Fastly 相关 (另一家CDN)
-    "fastly.net"
-    "prod.flatpak-api.fly.dev" # 示例Fastly服务
-    "edge.eu.fastly.net"       # Fastly欧洲边缘节点
-
-    # Amazon AWS 相关 (全球CDN)
-    "aws.amazon.com"
-    "d1.awsstatic.com"
-    "s0.awsstatic.com"
-    "player.live-video.net"
-    "eu-central-1.console.aws.amazon.com"  # AWS欧洲中部控制台
-
-    # Google 相关 (全球网络)
-    "google.com"
-    "www.google.com"
-    "gstatic.com"
-    "fonts.googleapis.com"
-    "fonts.gstatic.com"
-    "dns.google"                           # Google DNS
-
-    # Microsoft 相关 (Azure/CDN)
-    "microsoft.com"
-    "www.microsoft.com"
-    "azure.com"
-    "live.com"
-    "cdn-eu.azureedge.net"                 # Microsoft Azure欧洲CDN
-
-    # 其他大型全球服务 (通常在欧州有良好存在)
-    "github.com"
-    "www.github.com"
-    "githubassets.com"
-    "netflix.com"
-    "nflxvideo.net"
-    "facebook.com"
-    "instagram.com"
-    "whatsapp.com"
-    "open.spotify.com"
-    "duckduckgo.com"
-    "www.de.wikipedia.org"                 # 维基百科德国站点
-    "de.wikipedia.org"                     # 维基百科德国站点
-    "www.bbc.co.uk"                        # BBC英国站点
-
-    # 特定欧洲或德国服务/CDN
-    "hetzner.com"                          # 德国知名主机商:cite[1]:cite[6]
-    "contabo.com"                          # 德国主机商:cite[10]
-    "ovh.com"                              # 法国主机商，但在德国也有业务
-    "digitalocean.com"
-    "stackoverflow.com"
-    "sstatic.net"                          # Stack Exchange CDN
-
-    # 游戏相关 (部分在欧洲有服务器)
-    "riotgames.com"
-    "auth.riotgames.com"
-    "lol.secure.dyn.riotcdn.net"
-    "europe.api.riotgames.com"             # Riot Games欧洲API服务器
-    "prod.eu.lol.riotgames.com"            # 英雄联盟欧洲服务器
-
-    # 新增来自搜索推荐的部分域名
+    # 新增 Apple 系列域名 (信誉极高，全球CDN)
     "gateway.icloud.com"
     "itunes.apple.com"
     "swdist.apple.com"
     "swcdn.apple.com"
     "updates.cdn-apple.com"
-    "download-installer.cdn.mozilla.net"
-    "addons.mozilla.org"
+
+    # 新增 Microsoft 系列域名 (信誉极高，全球CDN)
+    "microsoft.com"
+    "www.microsoft.com"
+    "live.com"
+    "cdn-eu.azureedge.net" # Azure CDN
+
+    # 新增 Google 系列域名 (信誉极高，全球网络)
+    "google.com"
+    "www.google.com"
+    "gstatic.com"
+    "fonts.googleapis.com"
+    "fonts.gstatic.com"
+    "dns.google" # Google Public DNS
+
+    # 新增 Amazon AWS 系列域名 (信誉极高，全球CDN)
+    "aws.amazon.com"
+    "d1.awsstatic.com"
+    "s0.awsstatic.com"
+    "player.live-video.net" # Twitch
     "images-na.ssl-images-amazon.com"
     "m.media-amazon.com"
 
-    # 新增更多欧洲/德国优化域名
-    "www.eu.cloudflare.com"                # Cloudflare欧洲节点
-    "edge.eu.fastly.net"                   # Fastly欧洲边缘节点
-    "europe.cdn.ampproject.org"            # AMP项目欧洲CDN
-    "cdn-eu.azureedge.net"                 # Microsoft Azure欧洲CDN
-    "www.de.wikipedia.org"                 # 维基百科德国站点 (流量大，本地可能有缓存)
-    "www.spotify.com"                      # Spotify全球服务 (在欧洲有大量服务器)
-    "de.wikipedia.org"                     # 维基百科德国站点
-    "www.bbc.co.uk"                        # BBC英国站点 (地理位置相对较近)
-    "europe-west1.cloudfunctions.net"      # Google Cloud欧洲区域
-    "aws-eu-central-1.console.aws.amazon.com" # AWS欧洲（法兰克福）控制台
-    "status.eu-central-1.console.aws.amazon.com" # AWS欧洲（法兰克福）状态页
-    "europe.api.riotgames.com"             # Riot Games欧洲API服务器
-    "prod.eu.lol.riotgames.com"            # 英雄联盟欧洲服务器
-    "level3.ssl.blizzard.com"              # 暴雪游戏欧洲服务器
-    "dns.google"                           # Google DNS (anycast节点，可能会解析到较近的服务器)
-    "dns10.quad9.net"                      # Quad9 DNS欧洲节点
-    "de.ntp.org"                           # NTP欧洲服务器池 (虽然用途不同，但通常是低延迟的关键基础设施)
-    "nl.ntp.org"                           # NTP荷兰服务器
-    "fr.ntp.org"                           # NTP法国服务器
+    # 新增 Cloudflare 系列域名 (顶级CDN，信誉极佳)
+    "cloudflare.com"
+    "www.eu.cloudflare.com" # 欧洲节点
+    "one.one.one.one" # Cloudflare DNS
+
+    # 新增 Fastly 系列域名 (顶级CDN，信誉极佳)
+    "fastly.net"
+    "edge.eu.fastly.net" # 欧洲边缘节点
+
+    # 新增其他顶级科技公司域名 (信誉极高)
+    "github.com"
+    "www.github.com"
+    "githubassets.com"
+    "netflix.com"
+    "nflxvideo.net"
+    "open.spotify.com"
+    "addons.mozilla.org"
+
+    # 新增知名CDN或资源域名
+    "sstatic.net"            # Stack Exchange CDN
+    "europe.cdn.ampproject.org" # AMP CDN
+
+    # 新增信誉良好的欧洲服务/内容站点 (流量自然)
+    "www.de.wikipedia.org"
+    "de.wikipedia.org"
+    "www.bbc.co.uk"
+    "duckduckgo.com"
+
+    # 新增信誉良好的游戏服务 (可选)
+    "riotgames.com"
+    "auth.riotgames.com"
+    "lol.secure.dyn.riotcdn.net"
+    "europe.api.riotgames.com" # 欧洲API
 )
 
 # 检查TLS 1.3支持函数
