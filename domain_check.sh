@@ -42,6 +42,9 @@ DOMAINS=(
     "swdist.apple.com"
     "swcdn.apple.com"
     "updates.cdn-apple.com"
+    "mensura.cdn-apple.com"
+    "osxapps.itunes.apple.com"
+    "aod.itunes.apple.com"
 
     # 新增 Microsoft 系列域名 (信誉极高，全球CDN)
     "microsoft.com"
@@ -82,6 +85,7 @@ DOMAINS=(
     "nflxvideo.net"
     "open.spotify.com"
     "addons.mozilla.org"
+    "download-installer.cdn.mozilla.net"
 
     # 新增知名CDN或资源域名
     "sstatic.net"            # Stack Exchange CDN
@@ -96,6 +100,8 @@ DOMAINS=(
     # 新增信誉良好的游戏服务 (可选)
     "riotgames.com"
     "auth.riotgames.com"
+    "xsso.riotgames.com"
+    "csgo.com"
     "lol.secure.dyn.riotcdn.net"
     "europe.api.riotgames.com" # 欧洲API
 )
